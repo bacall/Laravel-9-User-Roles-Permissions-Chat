@@ -1,0 +1,133 @@
+chatify
+https://chatify.munafio.com/installation
+
+composer require munafio/chatify
+php artisan chatify:install
+php artisan migrate
+
+
+composer require laravel/ui
+php artisan ui bootstrap
+php artisan ui bootstrap --auth
+
+Update vite.config.js
+
+Update resources/js/bootstrap.js
+
+Update resources/js/app.js
+
+
+
+npm install 
+npm run build
+
+
+
+Encima de   resources/views/layouts/app.blade.php
+Nombre de usuario
+añadir
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('chatify') }}">{{ __('Chat') }}</a>
+</li>
+
+php artisan serve
+
+Registrase o Login
+
+
+spatie/laravel-permission
+
+composer require spatie/laravel-permission
+composer require laravelcollective/html
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+php artisan migrate
+
+app/Models/User.php
+
+<?php
+  
+namespace App\Models;
+  
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+  
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
+
+
+app/Http/Kernel.php
+
+....
+protected $routeMiddleware = [
+    ....
+    'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+    'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+    'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+]
+....
+
+
+Step 8: Creating Routes
+We are going to create some routes for our application. Basically going to create users module, products module and roles module routes. we had also use middleware for our routes. Just add the route as show below.
+
+<?php
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+Route::get('/', function () {
+    return view('welcome');
+});
+Auth::routes();
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+  
+Route::group(['middleware' => ['auth']], function() {
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('products', ProductController::class);
+});
+
+Se tiene que crear app/Http/Controllers/UserController.php
+
+Se tiene que crear app/Http/Controllers/RoleController.php
+
+Se modifica
+Home Layout:
+resources/views/layouts/app.blade.php
+
+Se crean
+User Blade Pages:
+resources/views/users/index.blade.php
+resources/views/users/create.blade.php
+resources/views/users/edit.blade.php
+resources/views/users/show.blade.php
+
+
+php artisan make:seeder PermissionTableSeeder
+
+Seeding database.
+php artisan db:seed --class=PermissionTableSeeder
+
+Seeder for Admin
+php artisan make:seeder CreateAdminUserSeeder
+
+Seeding database.
+php artisan db:seed --class=CreateAdminUserSeeder
+
