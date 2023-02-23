@@ -60,7 +60,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
 
-
+app/Models/User.php
 app/Http/Kernel.php
 
 ....
